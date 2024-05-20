@@ -12,6 +12,20 @@ final class SettingsViewModel: ObservableObject{
     func signOut() throws{
         try AuthenticationManager.shared.signOut()
     }
+    
+    func resetPassword() async throws{
+        let authUser = try AuthenticationManager.shared.getAuthenticatedUser()
+        
+        guard let email = authUser.email else{
+            throw URLError(.fileDoesNotExist)
+        }
+        
+        try await AuthenticationManager.shared.resetPassword(email: email)
+    }
+    
+    func deleteAccount() async throws{
+        try await AuthenticationManager.shared.delete()
+    }
 }
 
 struct SettingsView: View {
@@ -29,6 +43,20 @@ struct SettingsView: View {
                     }
                 }
             }
+            Button(role: .destructive){
+                Task{
+                    do{
+                        try await viewModel.deleteAccount()
+                        showSignInView = true
+                    } catch{
+                        print(error)
+                    }
+                }
+            } label: {
+                Text("Delete account")
+            }
+            
+            emailSection
         }
         .navigationBarTitle("Settings")
     }
@@ -38,6 +66,26 @@ struct SettingsView_Preview: PreviewProvider{
     static var previews: some View{
         NavigationStack{
             SettingsView(showSignInView: .constant(false))
+        }
+    }
+}
+
+extension SettingsView{
+    
+    private var emailSection: some View{
+        Section{
+            Button("Reset Password"){
+                Task{
+                    do{
+                        try await viewModel.resetPassword()
+                        print("Password Reset")
+                    } catch{
+                        print(error)
+                    }
+                }
+            }
+        } header: {
+            Text("Email functions")
         }
     }
 }
