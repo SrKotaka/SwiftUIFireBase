@@ -12,25 +12,27 @@ struct RootView: View {
     @State private var showSignInView: Bool = false
     
     var body: some View {
-        ZStack{
-            NavigationStack{
-                SettingsView(showSignInView: $showSignInView)
+        ZStack {
+            NavigationStack {
+                if !showSignInView {
+                    SettingsView(showSignInView: $showSignInView)
+                }
             }
         }
-        .onAppear{
+        .onAppear {
             let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
             self.showSignInView = authUser == nil
         }
-        .fullScreenCover(isPresented: $showSignInView){
-            NavigationStack{
+        .fullScreenCover(isPresented: $showSignInView) {
+            NavigationStack {
                 AuthenticationView(showSignInView: $showSignInView)
             }
         }
     }
 }
 
-struct RootView_Preview: PreviewProvider{
-    static var previews: some View{
+struct RootView_Preview: PreviewProvider {
+    static var previews: some View {
         RootView()
     }
 }
