@@ -74,6 +74,19 @@ struct SignInEmailView: View {
                     .background(Color.blue)
                     .cornerRadius(10)
             }
+            Button {
+                Task {
+                    await handleSignUp()
+                }
+            } label: {
+                Text("Sign Up")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(height: 55)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.blue)
+                    .cornerRadius(10)
+            }
             Spacer()
         }
         .padding()
@@ -90,6 +103,18 @@ struct SignInEmailView: View {
     private func handleSignIn() async {
         if !viewModel.email.isEmpty && !viewModel.password.isEmpty {
             await viewModel.signIn()
+            if viewModel.errorMessage == nil {
+                showSignInView = false
+            }
+        } else {
+            viewModel.errorMessage = "No email or password found."
+            viewModel.showErrorAlert = true
+        }
+    }
+    
+    private func handleSignUp() async {
+        if !viewModel.email.isEmpty && !viewModel.password.isEmpty {
+            await viewModel.signUp()
             if viewModel.errorMessage == nil {
                 showSignInView = false
             }

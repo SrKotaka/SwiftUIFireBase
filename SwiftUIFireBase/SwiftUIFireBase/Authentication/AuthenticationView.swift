@@ -16,7 +16,7 @@ struct AuthenticationView: View {
             NavigationLink {
                 SignInEmailView(showSignInView: $showSignInView)
             } label: {
-                Text("Sign In With Email")
+                Text("Sign In or Sign Up With Email")
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(height: 55)
