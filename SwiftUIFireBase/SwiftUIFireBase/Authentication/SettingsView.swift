@@ -55,8 +55,6 @@ struct SettingsView: View {
             } label: {
                 Text("Delete account")
             }
-            
-            emailSection
         }
         .navigationBarTitle("Settings")
     }
@@ -66,25 +64,6 @@ struct SettingsView_Preview: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             SettingsView(showSignInView: .constant(false))
-        }
-    }
-}
-
-extension SettingsView {
-    private var emailSection: some View {
-        Section {
-            Button("Reset Password") {
-                Task {
-                    do {
-                        try await viewModel.resetPassword()
-                        print("Password Reset")
-                    } catch {
-                        print(error)
-                    }
-                }
-            }
-        } header: {
-            Text("Email functions")
         }
     }
 }
